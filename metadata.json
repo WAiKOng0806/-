@@ -1,0 +1,5 @@
+{
+  "name": "CantoRadio",
+  "description": "A retro radio interface for discovering classic Cantonese Pop music from the 80s, 90s, and 00s.",
+  "requestFramePermissions": []
+}

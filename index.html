@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CantoRadio - 粵語金曲台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+      /* Custom Scrollbar for the printed paper */
+      .paper-scroll::-webkit-scrollbar {
+        width: 6px;
+      }
+      .paper-scroll::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      .paper-scroll::-webkit-scrollbar-thumb {
+        background: #a8a29e; 
+        border-radius: 2px;
+      }
+      
+      /* Dark Wrinkled Background for Body - Enhanced Texture */
+      .dark-wrinkled-bg {
+        background-color: #121212;
+        /* Base noise texture */
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='darkNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23darkNoise)'/%3E%3C/svg%3E"),
+                          radial-gradient(circle at 50% 50%, #2a2a2a 0%, #000000 90%);
+        background-blend-mode: overlay;
+      }
+
+      /* Wrinkled Paper Filter (Light) */
+      .wrinkled-paper-bg {
+         background-color: #fdfbf7;
+         background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='white' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)' opacity='0.5'/%3E%3C/svg%3E");
+         box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
+      }
+      
+      /* CRT/Digital Scanline effect */
+      .scanlines {
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0),
+          rgba(255,255,255,0) 50%,
+          rgba(0,0,0,0.2) 50%,
+          rgba(0,0,0,0.2)
+        );
+        background-size: 100% 4px;
+      }
+
+      /* Vinyl Grooves Texture */
+      .vinyl-grooves {
+        background: repeating-radial-gradient(
+          #111 0, 
+          #111 2px, 
+          #222 3px, 
+          #222 4px
+        );
+      }
+
+      /* Vinyl Shine Reflection */
+      .vinyl-shine {
+        background: linear-gradient(
+           135deg, 
+           transparent 0%, 
+           transparent 35%, 
+           rgba(255,255,255,0.1) 40%, 
+           rgba(255,255,255,0.2) 50%, 
+           rgba(255,255,255,0.1) 60%, 
+           transparent 65%, 
+           transparent 100%
+        );
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
+  }
+}
+</script>
+</head>
+  <body class="dark-wrinkled-bg text-gray-200 antialiased h-screen w-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <div id="root" class="w-full h-full flex flex-col items-center justify-center"></div>
+  </body>
+</html>
