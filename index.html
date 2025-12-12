@@ -21,13 +21,18 @@
         border-radius: 2px;
       }
       
-      /* Dark Wrinkled Background for Body - Enhanced Texture */
+      /* Dark Wrinkled Background - Intense Texture */
       .dark-wrinkled-bg {
-        background-color: #121212;
-        /* Base noise texture */
-        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='darkNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23darkNoise)'/%3E%3C/svg%3E"),
-                          radial-gradient(circle at 50% 50%, #2a2a2a 0%, #000000 90%);
-        background-blend-mode: overlay;
+        background-color: #050505;
+        /* 
+           Using a DiffuseLighting filter to create strong 3D wrinkles.
+           Low baseFrequency = larger wrinkles.
+           High surfaceScale = deeper wrinkles.
+        */
+        background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 400 400' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='intenseWrinkle'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='3' seed='10'/%3E%3CfeDiffuseLighting lighting-color='%23555' surfaceScale='20'%3E%3CfeDistantLight azimuth='60' elevation='25'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23intenseWrinkle)' opacity='0.4'/%3E%3C/svg%3E"),
+                          radial-gradient(circle at 50% 30%, #1a1a1a 0%, #000000 90%);
+        background-blend-mode: hard-light;
+        background-size: cover;
       }
 
       /* Wrinkled Paper Filter (Light) */

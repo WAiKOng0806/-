@@ -11,6 +11,9 @@ const fetchAlbumCovers = async (songs: Song[]): Promise<Song[]> => {
   const updatedSongs = await Promise.all(songs.map(async (song) => {
     try {
       const term = `${song.artist} ${song.title}`;
+      // Add a small delay/jitter to prevent hitting API rate limits instantly
+      // await new Promise(r => setTimeout(r, Math.random() * 500)); 
+      
       const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=1`);
       const data = await response.json();
       
@@ -19,7 +22,7 @@ const fetchAlbumCovers = async (songs: Song[]): Promise<Song[]> => {
         return { ...song, coverUrl: artworkUrl };
       }
     } catch (error) {
-      console.warn(`Failed to fetch cover for ${song.title}`, error);
+      // console.warn(`Failed to fetch cover for ${song.title}`, error);
     }
     return { 
         ...song, 
@@ -64,13 +67,26 @@ export const Radio: React.FC = () => {
     setPrinted(false);
     
     try {
+      // 1. Get List from Gemini (This is fast)
       const basicList = await fetchRecommendations(ARTIST_TYPES[artistTypeIndex], era);
-      const listWithCovers = await fetchAlbumCovers(basicList);
-      setSongs(listWithCovers);
+      
+      // 2. IMMEDIATE FEEDBACK: Show receipt with placeholders first
+      // This makes the UI feel much faster.
+      const listWithPlaceholders = basicList.map(s => ({
+          ...s,
+          coverUrl: `https://picsum.photos/seed/${encodeURIComponent(s.title)}/400`
+      }));
+      setSongs(listWithPlaceholders);
       setPrinted(true);
+      setLoading(false);
+
+      // 3. ASYNC UPDATE: Fetch real covers in background and update smoothly
+      fetchAlbumCovers(basicList).then(updatedList => {
+          setSongs(updatedList);
+      });
+
     } catch (error) {
       alert("Signal interference... could not tune in. Please try again.");
-    } finally {
       setLoading(false);
     }
   };
@@ -112,10 +128,7 @@ export const Radio: React.FC = () => {
                     {/* Vinyl Black Base + Grooves */}
                     <div className="absolute inset-0 rounded-full vinyl-grooves"></div>
                     
-                    {/* Vinyl Shine (Static relative to record, so it rotates with it if not separated. Usually shine is static relative to light source. 
-                        For CSS spin, if we put shine inside, it spins. To make it realistic, we often put shine ON TOP of the spinning container. 
-                        But here, let's let it spin for a stylized effect or put an overlay outside.) 
-                    */}
+                    {/* Vinyl Shine */}
                     
                     {/* Label Area */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 bg-orange-700 rounded-full border-4 border-black flex items-center justify-center overflow-hidden">
@@ -274,7 +287,7 @@ export const Radio: React.FC = () => {
                             
                             {/* Art - Larger */}
                             <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-300 shadow-md border-2 border-gray-800 overflow-hidden grayscale-[0.2] group-hover:grayscale-0 transition-all transform group-hover:scale-105">
-                                <img src={song.coverUrl} alt="album" className="w-full h-full object-cover" />
+                                <img src={song.coverUrl} alt="album" className="w-full h-full object-cover transition-opacity duration-500" loading="lazy" />
                             </div>
 
                             {/* Details */}
